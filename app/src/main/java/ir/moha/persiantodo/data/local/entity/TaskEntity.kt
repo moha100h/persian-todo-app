@@ -1,12 +1,21 @@
 package ir.moha.persiantodo.data.local.entity
 
 import androidx.room.Entity
+import androidx.room.Index
 import androidx.room.PrimaryKey
 
 enum class Priority { LOW, NORMAL, HIGH, URGENT }
 enum class RepeatType { NONE, DAILY, WEEKLY, MONTHLY, YEARLY }
 
-@Entity(tableName = "tasks")
+@Entity(
+    tableName = "tasks",
+    indices = [
+        Index("jalaliDate"),
+        Index("isCompleted"),
+        Index("categoryId"),
+        Index("priority")
+    ]
+)
 data class TaskEntity(
     @PrimaryKey(autoGenerate = true) val id: Long = 0,
     val title: String,
@@ -15,12 +24,10 @@ data class TaskEntity(
     val priority: Priority = Priority.NORMAL,
     val isCompleted: Boolean = false,
     val isPinned: Boolean = false,
-    // تاریخ شمسی به فرمت YYYY-MM-DD
-    val jalaliDate: String? = null,
-    // زمان یادآور به فرمت HH:mm
-    val reminderTime: String? = null,
+    val jalaliDate: String? = null,       // YYYY-MM-DD
+    val reminderTime: String? = null,     // HH:mm
     val repeatType: RepeatType = RepeatType.NONE,
-    val tags: String = "",          // JSON آرایه تگ‌ها
+    val tags: String = "",
     val createdAt: Long = System.currentTimeMillis(),
     val updatedAt: Long = System.currentTimeMillis(),
     val completedAt: Long? = null,
