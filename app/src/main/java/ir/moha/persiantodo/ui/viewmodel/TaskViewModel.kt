@@ -18,6 +18,14 @@ import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+// ── Helper: Quad برای combine چهار Flow ──────────────────
+private data class Quad<A, B, C, D>(val a: A, val b: B, val c: C, val d: D)
+private operator fun <A, B, C, D> Quad<A, B, C, D>.component1() = a
+private operator fun <A, B, C, D> Quad<A, B, C, D>.component2() = b
+private operator fun <A, B, C, D> Quad<A, B, C, D>.component3() = c
+private operator fun <A, B, C, D> Quad<A, B, C, D>.component4() = d
+
+// ── UI State ──────────────────────────────────────────────
 data class TaskUiState(
     val tasks: List<TaskEntity> = emptyList(),
     val categories: List<CategoryEntity> = emptyList(),
@@ -42,10 +50,10 @@ class TaskViewModel @Inject constructor(
     private val _uiState = MutableStateFlow(TaskUiState())
     val uiState: StateFlow<TaskUiState> = _uiState.asStateFlow()
 
-    private val _selectedDate = MutableStateFlow(JalaliCalendar.now())
+    private val _selectedDate       = MutableStateFlow(JalaliCalendar.now())
     private val _selectedCategoryId = MutableStateFlow<Long?>(null)
-    private val _showCompleted = MutableStateFlow(false)
-    private val _searchQuery = MutableStateFlow("")
+    private val _showCompleted      = MutableStateFlow(false)
+    private val _searchQuery        = MutableStateFlow("")
 
     init {
         observeTasks()
@@ -59,16 +67,15 @@ class TaskViewModel @Inject constructor(
             date, catId, showDone, query -> Quad(date, catId, showDone, query)
         }.flatMapLatest { (date, catId, showDone, query) ->
             repository.getTasks(
-                date = date.toString(),
-                categoryId = catId,
+                date          = date.toString(),
+                categoryId    = catId,
                 showCompleted = showDone,
-                query = query
+                query         = query
             )
         }.onEach { tasks ->
             _uiState.update { it.copy(tasks = tasks) }
         }.launchIn(viewModelScope)
 
-        // pending / completed counts
         _selectedDate.flatMapLatest { date ->
             combine(
                 repository.getPendingCount(date.toString()),
@@ -95,7 +102,7 @@ class TaskViewModel @Inject constructor(
             .launchIn(viewModelScope)
     }
 
-    // ── Actions ────────────────────────────────────────────
+    // ── Actions ───────────────────────────────────────────
     fun selectDate(date: JalaliCalendar.JalaliDate) {
         _selectedDate.value = date
         _uiState.update { it.copy(selectedDate = date) }
@@ -132,14 +139,14 @@ class TaskViewModel @Inject constructor(
             return@launch
         }
         val task = TaskEntity(
-            title = title.trim(),
+            title       = title.trim(),
             description = description.trim(),
-            priority = priority,
-            jalaliDate = date?.toString(),
+            priority    = priority,
+            jalaliDate  = date?.toString(),
             reminderTime = reminderTime,
-            repeatType = repeatType,
-            categoryId = categoryId,
-            tags = tags
+            repeatType  = repeatType,
+            categoryId  = categoryId,
+            tags        = tags
         )
         val id = repository.insertTask(task)
         if (reminderTime != null && date != null) {
@@ -175,7 +182,6 @@ class TaskViewModel @Inject constructor(
 
     fun clearSnackbar() = _uiState.update { it.copy(snackbarMessage = null) }
 
-    // ── Category ───────────────────────────────────────────
     fun addCategory(name: String, colorHex: String, icon: String) = viewModelScope.launch {
         if (name.isBlank()) return@launch
         repository.insertCategory(CategoryEntity(name = name, colorHex = colorHex, icon = icon))
@@ -187,9 +193,3 @@ class TaskViewModel @Inject constructor(
 
     suspend fun getTaskById(id: Long): TaskEntity? = repository.getTaskById(id)
 }
-
-private data class Quad<A,B,C,D>(val a: A, val b: B, val c: C, val d: D)
-private operator fun <A,B,C,D> Quad<A,B,C,D>.component1() = a
-private operator fun <A,B,C,D> Quad<A,B,C,D>.component2() = b
-private operator fun <A,B,C,D> Quad<A,B,C,D>.component3() = c
-private operator fun <A,B,C,D> Quad<A,B,C,D>.component4() = d
