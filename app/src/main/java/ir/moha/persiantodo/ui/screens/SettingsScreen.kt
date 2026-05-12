@@ -1,22 +1,15 @@
 package ir.moha.persiantodo.ui.screens
 
-import android.content.Context
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.datastore.preferences.core.booleanPreferencesKey
-import androidx.datastore.preferences.preferencesDataStore
-
-val Context.dataStore by preferencesDataStore(name = "settings")
-val DARK_MODE_KEY    = booleanPreferencesKey("dark_mode")
-val DYNAMIC_COLOR_KEY = booleanPreferencesKey("dynamic_color")
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
