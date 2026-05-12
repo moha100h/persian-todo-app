@@ -13,6 +13,7 @@ interface TaskRepository {
     fun getTotalPendingCount(): Flow<Int>
     fun getAllCategories(): Flow<List<CategoryEntity>>
     suspend fun getTaskById(id: Long): TaskEntity?
+    suspend fun getUpcomingReminders(fromDate: String): List<TaskEntity>
     suspend fun insertTask(task: TaskEntity): Long
     suspend fun updateTask(task: TaskEntity)
     suspend fun deleteTask(task: TaskEntity)
