@@ -11,7 +11,7 @@ import ir.moha.persiantodo.data.local.entity.TaskEntity
 @Database(
     entities = [TaskEntity::class, CategoryEntity::class],
     version = 1,
-    exportSchema = true
+    exportSchema = false          // false → نیازی به schema dir نیست
 )
 @TypeConverters(Converters::class)
 abstract class AppDatabase : RoomDatabase() {
