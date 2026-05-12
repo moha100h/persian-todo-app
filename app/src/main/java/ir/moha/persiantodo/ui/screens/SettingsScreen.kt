@@ -1,5 +1,6 @@
 package ir.moha.persiantodo.ui.screens
 
+import android.content.Context
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
@@ -9,18 +10,12 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.datastore.preferences.core.booleanPreferencesKey
-import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.preferencesDataStore
-import android.content.Context
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.launch
 
 val Context.dataStore by preferencesDataStore(name = "settings")
-val DARK_MODE_KEY = booleanPreferencesKey("dark_mode")
+val DARK_MODE_KEY    = booleanPreferencesKey("dark_mode")
 val DYNAMIC_COLOR_KEY = booleanPreferencesKey("dynamic_color")
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -50,11 +45,13 @@ fun SettingsScreen(
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             item {
-                Text("ظاهر", style = MaterialTheme.typography.titleSmall,
+                Text(
+                    "ظاهر",
+                    style = MaterialTheme.typography.titleSmall,
                     color = MaterialTheme.colorScheme.primary,
-                    modifier = Modifier.padding(vertical = 8.dp))
+                    modifier = Modifier.padding(vertical = 8.dp)
+                )
             }
-
             item {
                 SettingsToggleItem(
                     title = "حالت تاریک",
@@ -64,7 +61,6 @@ fun SettingsScreen(
                     onCheckedChange = onToggleDarkMode
                 )
             }
-
             item {
                 SettingsToggleItem(
                     title = "رنگ پویا",
@@ -74,24 +70,30 @@ fun SettingsScreen(
                     onCheckedChange = onToggleDynamicColor
                 )
             }
-
             item {
                 HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp))
-                Text("درباره", style = MaterialTheme.typography.titleSmall,
+                Text(
+                    "درباره",
+                    style = MaterialTheme.typography.titleSmall,
                     color = MaterialTheme.colorScheme.primary,
-                    modifier = Modifier.padding(vertical = 8.dp))
+                    modifier = Modifier.padding(vertical = 8.dp)
+                )
             }
-
             item {
                 Card(modifier = Modifier.fillMaxWidth()) {
                     Column(modifier = Modifier.padding(16.dp)) {
-                        Row(verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(12.dp)
+                        ) {
                             Icon(Icons.Filled.Info, null, tint = MaterialTheme.colorScheme.primary)
                             Column {
                                 Text("یادآور فارسی", style = MaterialTheme.typography.titleMedium)
-                                Text("نسخه ۱.۰.۰", style = MaterialTheme.typography.bodySmall,
-                                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f))
+                                Text(
+                                    "نسخه ۱.۰.۰",
+                                    style = MaterialTheme.typography.bodySmall,
+                                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
+                                )
                             }
                         }
                         Spacer(Modifier.height(8.dp))
@@ -124,8 +126,11 @@ private fun SettingsToggleItem(
             Icon(icon, null, tint = MaterialTheme.colorScheme.primary)
             Column(modifier = Modifier.weight(1f)) {
                 Text(title, style = MaterialTheme.typography.bodyLarge)
-                Text(subtitle, style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f))
+                Text(
+                    subtitle,
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
+                )
             }
             Switch(checked = checked, onCheckedChange = onCheckedChange)
         }
