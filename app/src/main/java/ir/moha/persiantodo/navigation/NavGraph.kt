@@ -1,6 +1,7 @@
 package ir.moha.persiantodo.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -25,52 +26,47 @@ fun NavGraph(
     isDarkMode: Boolean,
     isDynamicColor: Boolean,
     onToggleDarkMode: (Boolean) -> Unit,
-    onToggleDynamicColor: (Boolean) -> Unit
+    onToggleDynamicColor: (Boolean) -> Unit,
+    modifier: Modifier = Modifier
 ) {
-    NavHost(navController = navController, startDestination = Screen.Home.route) {
-
+    NavHost(
+        navController = navController,
+        startDestination = Screen.Home.route,
+        modifier = modifier
+    ) {
         composable(Screen.Home.route) {
             HomeScreen(
                 onAddTask  = { navController.navigate(Screen.AddTask.route) },
                 onEditTask = { id -> navController.navigate(Screen.EditTask.createRoute(id)) }
             )
         }
-
         composable(Screen.AddTask.route) {
-            AddEditTaskScreen(
-                taskId = null,
-                onBack = { navController.popBackStack() }
-            )
+            AddEditTaskScreen(taskId = null, onBack = { navController.popBackStack() })
         }
-
         composable(
             route = Screen.EditTask.route,
             arguments = listOf(navArgument("taskId") { type = NavType.LongType })
         ) { backStackEntry ->
-            val taskId = backStackEntry.arguments?.getLong("taskId")
             AddEditTaskScreen(
-                taskId = taskId,
+                taskId = backStackEntry.arguments?.getLong("taskId"),
                 onBack = { navController.popBackStack() }
             )
         }
-
         composable(Screen.Search.route) {
             SearchScreen(
                 onBack     = { navController.popBackStack() },
                 onEditTask = { id -> navController.navigate(Screen.EditTask.createRoute(id)) }
             )
         }
-
         composable(Screen.Stats.route) {
             StatsScreen(onBack = { navController.popBackStack() })
         }
-
         composable(Screen.Settings.route) {
             SettingsScreen(
-                onBack             = { navController.popBackStack() },
-                isDarkMode         = isDarkMode,
-                isDynamicColor     = isDynamicColor,
-                onToggleDarkMode   = onToggleDarkMode,
+                onBack               = { navController.popBackStack() },
+                isDarkMode           = isDarkMode,
+                isDynamicColor       = isDynamicColor,
+                onToggleDarkMode     = onToggleDarkMode,
                 onToggleDynamicColor = onToggleDynamicColor
             )
         }
