@@ -5,8 +5,18 @@ import ir.moha.persiantodo.data.local.entity.Priority
 import ir.moha.persiantodo.data.local.entity.RepeatType
 
 class Converters {
-    @TypeConverter fun fromPriority(p: Priority): String = p.name
-    @TypeConverter fun toPriority(s: String): Priority = Priority.valueOf(s)
-    @TypeConverter fun fromRepeat(r: RepeatType): String = r.name
-    @TypeConverter fun toRepeat(s: String): RepeatType = RepeatType.valueOf(s)
+
+    @TypeConverter
+    fun fromPriority(value: Priority): String = value.name
+
+    @TypeConverter
+    fun toPriority(value: String): Priority =
+        runCatching { Priority.valueOf(value) }.getOrDefault(Priority.NORMAL)
+
+    @TypeConverter
+    fun fromRepeatType(value: RepeatType): String = value.name
+
+    @TypeConverter
+    fun toRepeatType(value: String): RepeatType =
+        runCatching { RepeatType.valueOf(value) }.getOrDefault(RepeatType.NONE)
 }
