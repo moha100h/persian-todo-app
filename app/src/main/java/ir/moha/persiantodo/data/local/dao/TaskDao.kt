@@ -4,7 +4,6 @@ import androidx.room.*
 import ir.moha.persiantodo.data.local.entity.TaskEntity
 import kotlinx.coroutines.flow.Flow
 
-/** آمار هر روز برای نمودار تقویم */
 data class DateStat(
     val jalaliDate: String,
     val total: Int,
@@ -30,9 +29,6 @@ interface TaskDao {
         showCompleted: Boolean = true,
         query: String = ""
     ): Flow<List<TaskEntity>>
-
-    @Query("SELECT * FROM tasks WHERE jalaliDate = :date AND isCompleted = 0 ORDER BY reminderTime ASC")
-    fun getTasksForDate(date: String): Flow<List<TaskEntity>>
 
     @Query("SELECT * FROM tasks WHERE id = :id")
     suspend fun getTaskById(id: Long): TaskEntity?
@@ -68,8 +64,8 @@ interface TaskDao {
     @Delete
     suspend fun deleteTask(task: TaskEntity)
 
-    @Query("UPDATE tasks SET isCompleted = :done, completedAt = CASE WHEN :done = 1 THEN :now ELSE NULL END WHERE id = :id")
-    suspend fun setCompleted(id: Long, done: Boolean, now: Long = System.currentTimeMillis())
+    @Query("UPDATE tasks SET isCompleted = :done, completedAt = CASE WHEN :done = 1 THEN strftime('%s','now') * 1000 ELSE NULL END WHERE id = :id")
+    suspend fun setCompleted(id: Long, done: Boolean)
 
     @Query("UPDATE tasks SET isPinned = :pinned WHERE id = :id")
     suspend fun setPinned(id: Long, pinned: Boolean)
