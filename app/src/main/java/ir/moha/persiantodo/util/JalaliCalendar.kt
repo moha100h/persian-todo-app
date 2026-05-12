@@ -61,7 +61,6 @@ object JalaliCalendar {
             }
         }
 
-        /** جمع/تفریق روز — مثال: today + (-3) */
         operator fun plus(days: Int): JalaliDate {
             val g = toGregorian()
             val cal = Calendar.getInstance().apply {
@@ -74,9 +73,10 @@ object JalaliCalendar {
                 cal.get(Calendar.DAY_OF_MONTH)
             )
         }
+
+        operator fun compareTo(other: JalaliDate): Int = toString().compareTo(other.toString())
     }
 
-    // ── Factory ────────────────────────────────────────────
     fun now(): JalaliDate {
         val cal = Calendar.getInstance()
         return gregorianToJalali(
@@ -86,22 +86,19 @@ object JalaliCalendar {
         )
     }
 
-    /** parse از رشته "YYYY-MM-DD" */
     fun parse(s: String): JalaliDate? = runCatching {
         val parts = s.split("-")
         JalaliDate(parts[0].toInt(), parts[1].toInt(), parts[2].toInt())
     }.getOrNull()
 
-    // ── Algorithms ─────────────────────────────────────────
     fun gregorianToJalali(gy: Int, gm: Int, gd: Int): JalaliDate {
         val g = intArrayOf(0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334)
-        var jy: Int
         val jm: Int
         val jd: Int
-        var gy2 = if (gm > 2) gy + 1 else gy
+        val gy2 = if (gm > 2) gy + 1 else gy
         var days = 355666 + (365 * gy) + ((gy2 + 3) / 4) - ((gy2 + 99) / 100) +
                 ((gy2 + 399) / 400) + gd + g[gm - 1]
-        jy = -1595 + (33 * (days / 12053))
+        var jy = -1595 + (33 * (days / 12053))
         days %= 12053
         jy += 4 * (days / 1461)
         days %= 1461
@@ -115,9 +112,9 @@ object JalaliCalendar {
     }
 
     fun jalaliToGregorian(jy: Int, jm: Int, jd: Int): Triple<Int, Int, Int> {
-        var jy2 = jy - 979
-        var jm2 = jm - 1
-        var jd2 = jd - 1
+        val jy2 = jy - 979
+        val jm2 = jm - 1
+        val jd2 = jd - 1
         var jDayNo = 365 * jy2 + (jy2 / 33) * 8 + (jy2 % 33 + 3) / 4
         for (i in 0 until jm2) jDayNo += if (i < 6) 31 else 30
         jDayNo += jd2
@@ -154,7 +151,7 @@ object JalaliCalendar {
     }
 }
 
-// ── Extension ──────────────────────────────────────────────
+// ── Extensions ─────────────────────────────────────────────
 fun Int.toPersianDigits(): String {
     val persian = charArrayOf('۰','۱','۲','۳','۴','۵','۶','۷','۸','۹')
     return toString().map { if (it.isDigit()) persian[it - '0'] else it }.joinToString("")
