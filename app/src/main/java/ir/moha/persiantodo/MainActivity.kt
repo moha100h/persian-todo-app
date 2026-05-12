@@ -7,8 +7,12 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.*
-import androidx.compose.material.icons.outlined.*
+import androidx.compose.material.icons.filled.BarChart
+import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.outlined.BarChart
+import androidx.compose.material.icons.outlined.Home
+import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
@@ -52,7 +56,8 @@ class MainActivity : ComponentActivity() {
                 val navBackStack  by navController.currentBackStackEntryAsState()
                 val currentRoute  = navBackStack?.destination?.route
 
-                val bottomBarRoutes = listOf(Screen.Home.route, Screen.Stats.route)
+                // BottomBar فقط در صفحات اصلی نمایش داده می‌شود
+                val bottomBarRoutes = setOf(Screen.Home.route, Screen.Stats.route)
                 val showBottomBar   = currentRoute in bottomBarRoutes
 
                 Scaffold(
@@ -63,13 +68,17 @@ class MainActivity : ComponentActivity() {
                                 NavigationBarItem(
                                     selected = currentRoute == Screen.Home.route,
                                     onClick  = {
-                                        navController.navigate(Screen.Home.route) {
-                                            popUpTo(Screen.Home.route) { inclusive = true }
+                                        if (currentRoute != Screen.Home.route) {
+                                            navController.navigate(Screen.Home.route) {
+                                                popUpTo(Screen.Home.route) { inclusive = true }
+                                                launchSingleTop = true
+                                            }
                                         }
                                     },
                                     icon = {
                                         Icon(
-                                            if (currentRoute == Screen.Home.route) Icons.Filled.Home else Icons.Outlined.Home,
+                                            if (currentRoute == Screen.Home.route) Icons.Filled.Home
+                                            else Icons.Outlined.Home,
                                             contentDescription = "خانه"
                                         )
                                     },
@@ -77,31 +86,31 @@ class MainActivity : ComponentActivity() {
                                 )
                                 NavigationBarItem(
                                     selected = false,
-                                    onClick  = { navController.navigate(Screen.Search.route) },
-                                    icon     = { Icon(Icons.Outlined.Search, "جستجو") },
-                                    label    = { Text("جستجو") }
+                                    onClick  = {
+                                        navController.navigate(Screen.Search.route) {
+                                            launchSingleTop = true
+                                        }
+                                    },
+                                    icon = { Icon(Icons.Outlined.Search, "جستجو") },
+                                    label = { Text("جستجو") }
                                 )
                                 NavigationBarItem(
                                     selected = currentRoute == Screen.Stats.route,
-                                    onClick  = { navController.navigate(Screen.Stats.route) },
+                                    onClick  = {
+                                        if (currentRoute != Screen.Stats.route) {
+                                            navController.navigate(Screen.Stats.route) {
+                                                launchSingleTop = true
+                                            }
+                                        }
+                                    },
                                     icon = {
                                         Icon(
-                                            if (currentRoute == Screen.Stats.route) Icons.Filled.BarChart else Icons.Outlined.BarChart,
+                                            if (currentRoute == Screen.Stats.route) Icons.Filled.BarChart
+                                            else Icons.Outlined.BarChart,
                                             contentDescription = "آمار"
                                         )
                                     },
                                     label = { Text("آمار") }
-                                )
-                                NavigationBarItem(
-                                    selected = currentRoute == Screen.Settings.route,
-                                    onClick  = { navController.navigate(Screen.Settings.route) },
-                                    icon = {
-                                        Icon(
-                                            if (currentRoute == Screen.Settings.route) Icons.Filled.Settings else Icons.Outlined.Settings,
-                                            contentDescription = "تنظیمات"
-                                        )
-                                    },
-                                    label = { Text("تنظیمات") }
                                 )
                             }
                         }
