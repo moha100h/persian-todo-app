@@ -8,26 +8,27 @@ import androidx.compose.ui.unit.sp
 import androidx.glance.*
 import androidx.glance.action.actionStartActivity
 import androidx.glance.appwidget.GlanceAppWidget
+import androidx.glance.appwidget.GlanceId
 import androidx.glance.appwidget.provideContent
+import androidx.glance.color.ColorProvider
 import androidx.glance.layout.*
 import androidx.glance.text.*
-import androidx.glance.unit.ColorProvider
 import ir.moha.persiantodo.MainActivity
 
 class TodoWidget : GlanceAppWidget() {
 
     override suspend fun provideGlance(context: Context, id: GlanceId) {
         provideContent {
-            WidgetContent(context)
+            WidgetContent()
         }
     }
 
     @Composable
-    private fun WidgetContent(context: Context) {
+    private fun WidgetContent() {
         Box(
             modifier = GlanceModifier
                 .fillMaxSize()
-                .background(ColorProvider(Color(0xFF6650A4)))
+                .background(ColorProvider(day = Color(0xFF6650A4), night = Color(0xFF4A3780)))
                 .clickable(actionStartActivity<MainActivity>())
                 .padding(16.dp),
             contentAlignment = Alignment.Center
@@ -36,7 +37,7 @@ class TodoWidget : GlanceAppWidget() {
                 Text(
                     text = "📋 یادآور فارسی",
                     style = TextStyle(
-                        color = ColorProvider(Color.White),
+                        color = ColorProvider(day = Color.White, night = Color.White),
                         fontSize = 16.sp,
                         fontWeight = FontWeight.Bold
                     )
@@ -45,7 +46,10 @@ class TodoWidget : GlanceAppWidget() {
                 Text(
                     text = "برای مشاهده وظایف لمس کنید",
                     style = TextStyle(
-                        color = ColorProvider(Color.White.copy(alpha = 0.8f)),
+                        color = ColorProvider(
+                            day   = Color.White.copy(alpha = 0.8f),
+                            night = Color.White.copy(alpha = 0.8f)
+                        ),
                         fontSize = 12.sp
                     )
                 )
