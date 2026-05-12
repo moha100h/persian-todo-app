@@ -24,9 +24,9 @@ import androidx.navigation.compose.rememberNavController
 import dagger.hilt.android.AndroidEntryPoint
 import ir.moha.persiantodo.navigation.NavGraph
 import ir.moha.persiantodo.navigation.Screen
-import ir.moha.persiantodo.ui.screens.DARK_MODE_KEY
-import ir.moha.persiantodo.ui.screens.DYNAMIC_COLOR_KEY
-import ir.moha.persiantodo.ui.screens.dataStore
+import ir.moha.persiantodo.util.DARK_MODE_KEY
+import ir.moha.persiantodo.util.DYNAMIC_COLOR_KEY
+import ir.moha.persiantodo.util.dataStore
 import ir.moha.persiantodo.ui.theme.PersianTodoTheme
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
@@ -56,7 +56,6 @@ class MainActivity : ComponentActivity() {
                 val navBackStack  by navController.currentBackStackEntryAsState()
                 val currentRoute  = navBackStack?.destination?.route
 
-                // BottomBar فقط در صفحات اصلی نمایش داده می‌شود
                 val bottomBarRoutes = setOf(Screen.Home.route, Screen.Stats.route)
                 val showBottomBar   = currentRoute in bottomBarRoutes
 
