@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">یادآور فارسی</string>
+    <string name="add_task">وظیفه جدید</string>
+    <string name="edit_task">ویرایش وظیفه</string>
+    <string name="delete_task">حذف وظیفه</string>
+    <string name="task_title">عنوان وظیفه</string>
+    <string name="task_description">توضیحات</string>
+    <string name="priority">اولویت</string>
+    <string name="reminder">یادآور</string>
+    <string name="repeat">تکرار</string>
+    <string name="category">دسته‌بندی</string>
+    <string name="search">جستجو</string>
+    <string name="stats">آمار</string>
+    <string name="settings">تنظیمات</string>
+    <string name="home">خانه</string>
+    <string name="cancel">انصراف</string>
+    <string name="confirm">تأیید</string>
+    <string name="save">ذخیره</string>
+    <string name="delete">حذف</string>
+    <string name="no_tasks">وظیفه‌ای وجود ندارد</string>
+    <string name="channel_reminder_name">یادآور وظایف</string>
+    <string name="channel_reminder_desc">نوتیفیکیشن یادآور وظایف روزانه</string>
+    <string name="channel_daily_name">خلاصه روزانه</string>
+    <string name="channel_daily_desc">خلاصه وظایف روز</string>
+    <string name="widget_title">یادآور فارسی</string>
+    <string name="widget_desc">ویجت نمایش وظایف روزانه</string>
+</resources>
